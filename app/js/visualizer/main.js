@@ -261,7 +261,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 if (env.fog != undefined) _global.scene.fog = env.fog;
                 
                 env.rotateY(-Math.PI);
-                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/background.jpg');
+                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/background.png');
                 // env.visible = false;
 
                 _global.scene.add(env);
@@ -339,13 +339,14 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             sizeAttenuation: true,
             map: _global.mapPointer || new THREE.TextureLoader().load(_global.data.cdn + "/app/images/33622.svg"),
             transparent : true,
-            color: new THREE.Color('green')
+            color: new THREE.Color('#34d66e')
         });
         var dot = new THREE.Points(dotGeometry, dotMaterial);
         dot.userData.city = json.name;
         dot.userData.data = json.data;
         dot.userData.latitude = json.lat;
         dot.userData.longitude = json.lon;
+        dot.userData.weeklyincidents = json.data.weeklyincidents;
         _global.locationPointer.add(dot);
     }
 
@@ -379,10 +380,13 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         var weekAngle = 0;
         var monthAngle = -Math.PI/15;
 
+        _global.dialerBars = new THREE.Group();
+        _global.dialerBars.name = "dialerbars";
+
         for (var i = 0; i < weeks; i++) {
             
             var barMat = new THREE.MeshBasicMaterial({
-                color: "yellow"
+                color: "#34d66e"
             });
             var barWidth = 0.1;
             var barHeigth = 0.8;
@@ -397,7 +401,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             weekNum.className = 'week';
 
             var p1 = new THREE.CSS3DObject(weekNum);
-            p1.position.y = radius - barHeigth / 2 ;
+            p1.position.y = radius - barHeigth / 2 + 0.1;
             p1.rotateZ(weekAngle);
             p1.scale.set(0.3, 0.3, 0.3);
             _rotateFromWorld(p1, new THREE.Vector3(0, 0, weekAngle));
@@ -405,9 +409,10 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             weekAngle += -2 * Math.PI / weeks;
             
             weekNums.add(p1);
-            _global.dialerPanel.add(bar);
+            _global.dialerBars.add(bar);
 
         }
+        _global.dialerPanel.add(_global.dialerBars);
 
         _global.dialerPanel.add(circle);   
 
@@ -415,7 +420,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
             var p = new THREE.CSS3DObject(monthText[j]);
                       
-            p.position.y = radius + 0.3;
+            p.position.y = radius + 0.25;
             p.rotateZ( monthAngle );
             p.scale.set(0.35, 0.35, 0.35);
             
@@ -467,7 +472,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
     }
 
-    function _rotateFromWorld( object, angles ) {
+    function _rotateFromWorld( object, angles) {
 
         object.position.applyEuler(new THREE.Euler(angles.x, angles.y, angles.z, 'XYZ'));
 
@@ -654,11 +659,38 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         }
     }
 
+    this.updateDialer = function(data){
+        for( var i = 0; i < 52; i++ ) {
+            if ( data[i] <= 10 ) { 
+                _global.dialerBars.children[i].material.color.set('#34d66e');
+            } else if ( data[i] > 10 && data[i] < 20 ){
+                _global.dialerBars.children[i].material.color.set('#eec200');
+            } else {
+                _global.dialerBars.children[i].material.color.set('#e65038');
+            }
+        }
+    };
+
     this.updateGeoData = function (obj) {
-        var point = _locationToVector(obj.userData.latitude, obj.userData.longitude, 12);
-        _global.object.position = new THREE.Vector3(point.x, 0, point.z);
-        _global.texts.position =  new THREE.Vector3(point.x, 0, point.z);
-        _global.statusPanel.position = new THREE.Vector3(point.x, 0, point.z);
+        var point = _locationToVector(obj.userData.latitude, obj.userData.longitude, 12, Math.PI/2);
+        // _global.object.position = new THREE.Vector3(point.x, 0, point.z);
+        // _global.texts.position =  new THREE.Vector3(point.x, 0, point.z);
+        // _global.statusPanel.position = new THREE.Vector3(point.x, 0, point.z);
+
+
+        var v1 = new THREE.Vector2(point.x, point.z);
+        var v2 = new THREE.Vector2(_global.object.position.x, _global.object.position.z);
+        var angle = Math.atan2(v2.y - v1.y, v2.x - v1.x)
+        console.log( angle );
+
+        // _global.object.position.copy( new THREE.Vector3(point.x, 0, point.z) );
+        // _global.texts.position.copy( new THREE.Vector3(point.x, 0, point.z) );
+        // _global.statusPanel.position.copy( new THREE.Vector3(point.x + 2, 2, point.z - 4.5) );
+
+        // _global.object.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
+        // _global.texts.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
+        // _global.statusPanel.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
+
         // var phi = (90 - obj.userData.latitude) * (Math.PI / 180);
 
         // _rotateFromWorld(_global.object, {x:0, y: -phi, z:0});
@@ -668,9 +700,12 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         // _global.object.lookAt(_global.camera.position);
         // _global.texts.lookAt(_global.camera.position);
         // _global.statusPanel.lookAt(_global.camera.position);
-
+        _this.updateDialer(obj.userData.weeklyincidents);
         _global.geoData.setDisplay(true);
         _global.geoData.update(obj.userData);
+        // setTimeout(() => {
+        //     _global.geoData.setDisplay(false);            
+        // }, 10 * 1000);
     };
 
     this.setDisplayGeoData = function(boolean){
@@ -859,6 +894,9 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     } else {
                         console.warn("Post Processing is enabled but no passes assigned. Ignoring this event.");
                     }
+                    break;
+                case "q" || "Q":
+                        _global.geoData.setDisplay(false); 
                     break;
             }
         });

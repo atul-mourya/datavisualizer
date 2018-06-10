@@ -1,4 +1,4 @@
-var LocationDataStatus = function (params) {
+var LocationDataStatus = function () {
 		
 	var z = -0;
 

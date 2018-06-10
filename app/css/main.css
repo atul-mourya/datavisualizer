@@ -69,11 +69,11 @@ p.location-data-value {
 
 #CalenderPanel{
     position: absolute;
-    /* display: none; */
     background-color: #fff;
     width: 800px;
     height: 400px;
-    transform: translate(50%, 50%);
+    top: calc( 50% - 200px );
+    left: calc( 50% - 400px );
 }
 #calender-controller{
     position: relative;
