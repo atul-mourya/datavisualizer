@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Data Visualization</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" media="screen" href="/app/css/main.css" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <script src="/app/js/vendor/jquery/jquery-3.3.1.min.js"></script>
+    <script src="/app/js/vendor/d3/d3.v3.min.js"></script>
+    <script src="/app/js/vendor/d3/d3.tip.v0.6.3.js"></script>
+    
+</head>
+<body>
+    <div id="visualizer"></div>
+    <div id="text-container">
+        <p class="month" onclick="e.showMonthlyStats('JANUARY');">JANUARY</p>
+        <p class="month" onclick="e.showMonthlyStats('FEBRUARY');">FEBRUARY</p>
+        <p class="month" onclick="e.showMonthlyStats('MARCH');">MARCH</p>
+        <p class="month" onclick="e.showMonthlyStats('APRIL');">APRIL</p>
+        <p class="month" onclick="e.showMonthlyStats('MAY');">MAY</p>
+        <p class="month" onclick="e.showMonthlyStats('JUNE');">JUNE</p>
+        <p class="month" onclick="e.showMonthlyStats('JULY');">JULY</p>
+        <p class="month" onclick="e.showMonthlyStats('AUGUST');">AUGUST</p>
+        <p class="month" onclick="e.showMonthlyStats('SEPTEMBER');">SEPTEMBER</p>
+        <p class="month" onclick="e.showMonthlyStats('OCTOBER');">OCTOBER</p>
+        <p class="month" onclick="e.showMonthlyStats('NOVEMBER');">NOVEMBER</p>
+        <p class="month" onclick="e.showMonthlyStats('DECEMBER');">DECEMBER</p>
+    </div>
+
+    <div id="CalenderPanel">
+        <div id="calender-controller">
+            <i class="fas fa-times"></i>
+            <div class="calender-controller-header title"><p>Status</p></div>
+            <div class="calender-controller-header selected-month">
+                <p>Month</p> 
+                <select id="month-selector">
+                    <option value="january">JANUARY</option>
+                    <option value="february" >FEBRUARY</option>
+                    <option value="march" >MARCH</option>
+                    <option value="april" >APRIL</option>
+                    <option value="may" >MAY</option>
+                    <option value="june" >JUNE</option>
+                    <option value="july" >JULY</option>
+                    <option value="august" >AUGUST</option>
+                    <option value="september" >SEPTEMBER</option>
+                    <option value="october" >OCTOBER</option>
+                    <option value="november" >NOVEMBER</option>
+                    <option value="december" >DECEMBER</option>
+                </select>
+            </div>
+        </div>
+        <div id="monthStatsPanel"></div>
+    </div>
+
+    <div id="firewall-panel">
+        <div class="firewall-panel title">
+            <p class="firewall-panel title-fixed"> Location:</p>
+            <p id="firewall-panel-location" class="firewall-panel title-dynamic">Test City</p>
+        </div>
+        <div id="firewall-status">
+            <div class="incidents">
+                incidents : 00
+            </div>
+            <div class="solved">
+                solve : 00
+            </div>
+            <div class="ongoing">
+                ongoing : 00
+            </div>
+            <div class="critical">
+                critical : 00
+            </div>
+        </div>
+    </div>
+
+    
+
+    <script src="/app/js/visualizer/main.js"></script>
+    <script src="/app/js/visualizer/BarChart.js"></script>    
+    <script src="/app/js/visualizer/controller.js"></script>
+</body>
+</html>

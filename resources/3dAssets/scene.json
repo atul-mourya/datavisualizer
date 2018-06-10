@@ -1,0 +1,100 @@
+{
+	"metadata": {
+		"version": 4.5,
+		"type": "Object",
+		"generator": "Object3D.toJSON"
+	},
+	"geometries": [
+		{
+			"uuid": "D48BADEB-2343-4A3A-A7D9-1C063CB7B42C",
+			"type": "IcosahedronGeometry",
+			"radius": 5,
+			"detail": 1
+		}],
+	"materials": [
+		{
+			"uuid": "D38A7A8C-847C-44C8-A826-D17138137E0F",
+			"type": "MeshPhongMaterial",
+			"color": "0xb7b7b7",
+			"emissive": "0x202020",
+			"specular": 1118481,
+			"shininess": 30,
+			"map": "5C412CBB-2BB0-4F87-A22A-FC57023DFA4A",
+			"flatShading": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true
+		},
+		{
+			"uuid": "8A782C0F-D443-420A-96BB-8B2C929FDEF1",
+			"type": "MeshBasicMaterial",
+			"color": 16777215,
+			"opacity": 0.05,
+			"transparent": true,
+			"depthFunc": 3,
+			"depthTest": true,
+			"depthWrite": true,
+			"wireframe": true
+		}],
+	"textures": [
+		{
+			"uuid": "5C412CBB-2BB0-4F87-A22A-FC57023DFA4A",
+			"name": "",
+			"mapping": 300,
+			"repeat": [1,1],
+			"offset": [0,0],
+			"center": [0,0],
+			"rotation": 0,
+			"wrap": [1001,1001],
+			"format": 1022,
+			"minFilter": 1008,
+			"magFilter": 1006,
+			"anisotropy": 1,
+			"flipY": true,
+			"image": "73C98C3C-938B-4EA8-8BD0-0C053A0781D1"
+		}],
+	"images": [
+		{
+			"uuid": "73C98C3C-938B-4EA8-8BD0-0C053A0781D1",
+			"url": "BlankMap-Equirectangular.jpg"
+		}],
+	"object": {
+		"uuid": "63EC6EEA-689B-47CC-BA06-836E64931C19",
+		"type": "Scene",
+		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+		"children": [
+			{
+				"uuid": "5909F3BF-712F-4CAD-9DCE-62FF6177A69F",
+				"type": "HemisphereLight",
+				"name": "HemisphereLight",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,10,0,1],
+				"color": 15658734,
+				"intensity": 1,
+				"groundColor": 6710886
+			},
+			{
+				"uuid": "F01D7CE5-A635-44DF-A810-6041625EA517",
+				"type": "Group",
+				"name": "MainGlobe",
+				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+				"children": [
+					{
+						"uuid": "9A3032F4-4962-4B78-B842-C91B2DA201BC",
+						"type": "Mesh",
+						"name": "globe",
+						"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+						"geometry": "D48BADEB-2343-4A3A-A7D9-1C063CB7B42C",
+						"material": "D38A7A8C-847C-44C8-A826-D17138137E0F"
+					},
+					{
+						"uuid": "5A6247F6-D51D-49B3-9E1B-746B3DB12E17",
+						"type": "Mesh",
+						"name": "edges",
+						"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
+						"geometry": "D48BADEB-2343-4A3A-A7D9-1C063CB7B42C",
+						"material": "8A782C0F-D443-420A-96BB-8B2C929FDEF1"
+					}]
+			}],
+		"background": 2597795
+	}
+}

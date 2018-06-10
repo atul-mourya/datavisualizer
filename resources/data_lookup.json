@@ -1,0 +1,8 @@
+{
+    "scene": {
+        "url":"/resources/3dAssets/scene.json",
+        "texturePath": "/resources/3dAssets/textures/",
+        "background":"/resources/3dAssets/background.json"
+    },
+    "data": "/resources/data/data.json"
+}

@@ -1,0 +1,189 @@
+body {
+    background-color: #000;
+    margin: 0px;
+    overflow: hidden;
+}
+
+#visualizer{
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 100%;
+    width: 100%;
+}
+
+.month,
+.week {
+    font-size: 1px;
+    margin: 0;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    
+}
+p.month:hover {
+    color: yellow;
+    cursor: pointer;
+}
+
+p.location-data-value {
+    color: white;
+    font-size: 2px;
+    padding: 0px;
+    margin: 0px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#firewall-panel{
+    position: absolute;
+    width: 130px;
+    display: none;
+}
+
+.firewall-panel{
+    margin: 0;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.firewall-panel .title-dynamic{
+    font-size: 28px;
+    padding-bottom: 10px;
+    text-transform: uppercase;
+}
+
+#firewall-status div{
+    border-radius: 5px;
+    text-align: center;
+    margin: 0 0 2px 2px;
+    padding: 0 0 2px 2px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#firewall-status .incidents{background-color: #f5f5f5; color:#8d8d8d}
+#firewall-status .solved{background-color: #34d66e; color:rgb(0, 0, 0)}
+#firewall-status .ongoing{background-color: #eec200; color:rgb(0, 0, 0)}
+#firewall-status .critical{background-color: #e6503a; color:rgb(0, 0, 0)}
+
+
+
+
+#CalenderPanel{
+    position: absolute;
+    /* display: none; */
+    background-color: #fff;
+    width: 800px;
+    height: 400px;
+    transform: translate(50%, 50%);
+}
+#calender-controller{
+    position: relative;
+    margin: 0px;
+    top: 0px;
+    height: 100px;
+    width: 100%;
+}
+#calender-controller i.fas.fa-times{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+    color:#576786;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.calender-controller-header{
+    position: relative;
+    width: 50%;
+    height: 100%;
+}
+
+.calender-controller-header p{
+    font-size: 48px;
+    margin: 0;
+    padding: 10px;
+    color: #576786;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.calender-controller-header.title{
+    float: left;
+}
+
+.calender-controller-header.selected-month{
+    float: right;
+    text-align: right;
+    position: relative;    
+}
+#month-selector{
+    margin-right: 10px;
+    border: none;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+#monthStatsPanel{
+    position: relative;
+    width: 800px;
+    height: 300px;
+}
+
+.axis path,
+.axis line {
+    fill: none;
+    /* stroke: #000;
+    shape-rendering: crispEdges; */
+}
+
+
+.bar {
+    /* fill: orange; */
+    width: 5px;
+}
+
+.bar:hover {
+    fill: #0095ff;
+}
+
+.x.axis path {
+    display: block;
+    stroke: #000;
+}
+
+.tick{
+    font-family: 'Segoe UI',
+    Tahoma,
+    Geneva,
+    Verdana,
+    sans-serif;
+}
+
+.d3-tip {
+    line-height: 1;
+    font-weight: bold;
+    padding: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 2px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Creates a small triangle extender for the tooltip */
+
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.8);
+    content: "\25BC";
+    position: absolute;
+    text-align: center;
+}
+
+/* Style northward tooltips differently */
+
+.d3-tip.n:after {
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+}

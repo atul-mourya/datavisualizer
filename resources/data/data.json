@@ -1,0 +1,213 @@
+{
+    "locations": [{
+            "name": "Dubai",
+            "lat": 25.204849,
+            "lon": 55.270783,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "London",
+            "lat": 51.507351,
+            "lon": -0.127758,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 60,
+                "barlevel3": 100
+            }
+        },
+        {
+            "name": "Paris",
+            "lat": 48.856614,
+            "lon": 2.352222,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 70,
+                "barlevel2": 80,
+                "barlevel3": 100
+            }
+        },
+        {
+            "name": "Berlin",
+            "lat": 52.520007,
+            "lon": 13.404954,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 50,
+                "barlevel2": 80,
+                "barlevel3": 100
+            }
+        },
+        {
+            "name": "New Delhi",
+            "lat": 28.613939,
+            "lon": 77.209021,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 50,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "New York",
+            "lat": 40.712775,
+            "lon": -74.005973,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 70,
+                "barlevel2": 80,
+                "barlevel3": 95
+            }
+        },
+        {
+            "name": "Singapore",
+            "lat": 1.352083,
+            "lon": 103.819836,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Beijing",
+            "lat": 39.904200,
+            "lon": 116.407396,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Tokyo",
+            "lat": 35.689487,
+            "lon": 139.691706,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Moscow",
+            "lat": 55.755826,
+            "lon": 37.617300,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Cape Town",
+            "lat": -33.924869,
+            "lon": 18.424055,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Sydney",
+            "lat": -33.868820,
+            "lon": 151.209296,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Auckland",
+            "lat": -36.848460,
+            "lon": 174.763332,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Rio De Janeiro",
+            "lat": -22.906847,
+            "lon": -43.172896,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        },
+        {
+            "name": "Vancouver",
+            "lat": 49.282729,
+            "lon": -123.120738,
+            "data": {
+                "incidents": 14,
+                "solved": 12,
+                "ongoing": 2,
+                "critical": 1,
+                "barlevel1": 100,
+                "barlevel2": 80,
+                "barlevel3": 92
+            }
+        }
+    ]
+}
