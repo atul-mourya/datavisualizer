@@ -43,7 +43,7 @@ var BarChart = function (container) {
 
         var selectedMonth = !selectedMonth ?  "january" : selectedMonth.toLowerCase();
 
-        d3.json("/resources/data/MonthlyData.json", function (error, data) {
+        d3.json("datavisualizer/resources/data/MonthlyData.json", function (error, data) {
 
             x.domain(data[selectedMonth].map(function (d) { return d.date; }));
             y.domain([0, d3.max(data[selectedMonth], function(d) { return d.values; })]);
@@ -84,7 +84,7 @@ var BarChart = function (container) {
     this.update = function (selectedMonth) {
         selectedMonth = selectedMonth.toLowerCase();
         
-        d3.json("/resources/data/MonthlyData.json", function(error, data) {
+        d3.json("datavisualizer/resources/data/MonthlyData.json", function(error, data) {
             
             var bars = svg.selectAll('.bar')
                 .data(data[selectedMonth]);

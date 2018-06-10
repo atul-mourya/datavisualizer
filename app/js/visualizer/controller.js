@@ -8,6 +8,8 @@ var baseUrl = null;
 window.location.origin || (window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ":" + window.location.port : "")),
 baseUrl = window.location.origin + getContextPath();
 
+baseUrl = '/datavisualizer';
+
 var e = {
     settings:{
         container: document.getElementById('visualizer')

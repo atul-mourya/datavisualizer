@@ -261,7 +261,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 if (env.fog != undefined) _global.scene.fog = env.fog;
                 
                 env.rotateY(-Math.PI);
-                _global.scene.background = new THREE.TextureLoader().load('/resources/3dAssets/textures/background.jpg');
+                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/background.jpg');
                 // env.visible = false;
 
                 _global.scene.add(env);
