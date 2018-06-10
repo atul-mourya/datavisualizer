@@ -716,21 +716,6 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         return _global.INTERSECTED ? _global.INTERSECTED : null;
     };
 
-    this.selectColor = function (colorName) {
-        if (colorName && _global.bodyColors && _global.bodyColors[colorName.toUpperCase()]) {
-
-            var bodyColorMaterial = _global.bodyColors[colorName.toUpperCase()];
-
-            _applyMaterial(bodyColorMaterial, _global.carBody);
-            _applyToBodyColoredParts(_global.bodyColoredParts);
-
-
-        } else {
-            throw IZMO.exception.notfound(colorName);
-        }
-        _refreshRenderFrame();
-    };
-
     this.rotate = function (param) {
         if (param && param.direction) {
             _animate(param.play);
@@ -749,8 +734,6 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
     this.screenShot = function (height, width, cameraPosition) {
         if (!_global.sceneReady) return;
-
-        IZMO.fx.stopAll();
 
         var originalFOV = _global.camera.fov;
 
@@ -951,47 +934,6 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         document.body.appendChild(_this.rendererStats.domElement);
     }
 
-    this.changeScene = function (location) {
-        var env = _global.environmentParts;
-
-        _global.canvas.style.filter = 'blur(35px)';
-
-        _disposeObjMemory(env);
-        _global.scene.remove(env);
-
-        var loader = new THREE.ObjectLoader();
-        loader.load(_global.data.cdn + _global.sceneList[location].directory + _global.sceneList[location].modelurl, function (obj) {
-
-            if (obj.background) _global.scene.background = obj.background;
-            obj.fog ? _global.scene.fog = obj.fog : _global.scene.fog = new THREE.Fog(0, 0.1, 0);
-
-            var hasMesh = false;
-            obj.children.forEach(function (element) {
-
-                if (element.type === "Mesh") {
-                    _global.reflectionCube = _loadCubeMap(_global.data.cdn + _global.sceneList[location].directory, reflectionCubeCallback);
-                    hasMesh = true;
-                }
-
-            });
-            if (!hasMesh) _global.canvas.style.filter = 'blur(0px)', _refreshRenderFrame();
-            _global.scene.add(obj);
-            _global.environmentParts = obj;
-
-        });
-
-        var reflectionCubeCallback = function () {
-            if (_global.reflectionCube.image.length != 0) {
-                _global.envMapComponent.forEach(function (element) {
-                    element.material.envMap.dispose();
-                    element.material.envMap = _global.reflectionCube;
-                    element.needsUpdate = true;
-                });
-            }
-            _global.canvas.style.filter = 'blur(0px)';
-            _refreshRenderFrame();
-        };
-    };
 };
 
 function find(array, key, value) {

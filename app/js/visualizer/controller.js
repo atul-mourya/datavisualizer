@@ -65,12 +65,7 @@ document.querySelector('#CalenderPanel').style.display = 'none';
 e.showMonthlyStats = function (month) {
     
     updateCalenderPanel( month );
-    // console.log("You selected : " + month);
-    // document.querySelector('.calender-controller-header.selected-month p').innerText = selectedMonth.toUpperCase();
-    // e.barChart.update( month.toLowerCase() );
-    // document.querySelector('#CalenderPanel').style.display = 'block';
-    // e.visualizer.setDisplayGeoData(false);
-    
+
 };
 
 function updateCalenderPanel(month) {
@@ -83,14 +78,14 @@ function updateCalenderPanel(month) {
 }
 
 document.querySelector('#CalenderPanel').addEventListener("change", function (event) {
-    // console.log("Change month");
-    // var selectedMonth = event.target.value;
+
     updateCalenderPanel(event.target.value)
-    // document.querySelector('.calender-controller-header.selected-month p').innerText = selectedMonth.toUpperCase();
-    // e.barChart.update( selectedMonth );
+    
 });
 
 document.querySelector('#calender-controller i.fas.fa-times').addEventListener('click', function(event) {
+    
     document.querySelector('#CalenderPanel').style.display = 'none';
+    
 });
 
