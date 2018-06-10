@@ -107,8 +107,8 @@
                 "ongoing": 2,
                 "critical": 1,
                 "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel2": 40,
+                "barlevel3": 80
             }
         },
         {
@@ -121,8 +121,8 @@
                 "ongoing": 2,
                 "critical": 1,
                 "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel2": 60,
+                "barlevel3": 100
             }
         },
         {
@@ -134,7 +134,7 @@
                 "solved": 12,
                 "ongoing": 2,
                 "critical": 1,
-                "barlevel1": 100,
+                "barlevel1": 50,
                 "barlevel2": 80,
                 "barlevel3": 92
             }
@@ -148,9 +148,9 @@
                 "solved": 12,
                 "ongoing": 2,
                 "critical": 1,
-                "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel1": 60,
+                "barlevel2": 40,
+                "barlevel3": 100
             }
         },
         {
@@ -163,8 +163,8 @@
                 "ongoing": 2,
                 "critical": 1,
                 "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel2": 100,
+                "barlevel3": 100
             }
         },
         {
@@ -177,8 +177,8 @@
                 "ongoing": 2,
                 "critical": 1,
                 "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel2": 100,
+                "barlevel3": 40
             }
         },
         {
@@ -192,7 +192,7 @@
                 "critical": 1,
                 "barlevel1": 100,
                 "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel3": 100
             }
         },
         {
@@ -205,8 +205,8 @@
                 "ongoing": 2,
                 "critical": 1,
                 "barlevel1": 100,
-                "barlevel2": 80,
-                "barlevel3": 92
+                "barlevel2": 100,
+                "barlevel3": 100
             }
         }
     ]

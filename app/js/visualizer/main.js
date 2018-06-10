@@ -344,6 +344,8 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         var dot = new THREE.Points(dotGeometry, dotMaterial);
         dot.userData.city = json.name;
         dot.userData.data = json.data;
+        dot.userData.latitude = json.lat;
+        dot.userData.longitude = json.lon;
         _global.locationPointer.add(dot);
     }
 
@@ -653,6 +655,20 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     }
 
     this.updateGeoData = function (obj) {
+        var point = _locationToVector(obj.userData.latitude, obj.userData.longitude, 12);
+        _global.object.position = new THREE.Vector3(point.x, 0, point.z);
+        _global.texts.position =  new THREE.Vector3(point.x, 0, point.z);
+        _global.statusPanel.position = new THREE.Vector3(point.x, 0, point.z);
+        // var phi = (90 - obj.userData.latitude) * (Math.PI / 180);
+
+        // _rotateFromWorld(_global.object, {x:0, y: -phi, z:0});
+        // _rotateFromWorld(_global.texts, {x:0, y: -phi, z:0});
+        // _rotateFromWorld( _global.statusPanel, {x:0, y: -phi, z:0});
+
+        // _global.object.lookAt(_global.camera.position);
+        // _global.texts.lookAt(_global.camera.position);
+        // _global.statusPanel.lookAt(_global.camera.position);
+
         _global.geoData.setDisplay(true);
         _global.geoData.update(obj.userData);
     };
