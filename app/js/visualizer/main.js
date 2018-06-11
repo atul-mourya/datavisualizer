@@ -313,10 +313,12 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 _global.locationPointer = new THREE.Group();
                 _global.locationPointer.name = "Location Pointers";
                 _global.scene.add(_global.locationPointer);
-                
+                _global.worldWideIncidents =  json.global.weeklyincidents;
                 json.locations.forEach(function (element) {
                     _addHotspots(element);
                 });
+                _this.updateDialer( _global.worldWideIncidents );
+
 
             });
 
@@ -671,35 +673,27 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         }
     };
 
+
+    //must try
     this.updateGeoData = function (obj) {
-        var point = _locationToVector(obj.userData.latitude, obj.userData.longitude, 12, Math.PI/2);
-        // _global.object.position = new THREE.Vector3(point.x, 0, point.z);
-        // _global.texts.position =  new THREE.Vector3(point.x, 0, point.z);
-        // _global.statusPanel.position = new THREE.Vector3(point.x, 0, point.z);
+        var point = _locationToVector(0, obj.userData.longitude-30, 12);
+        var point2 = _locationToVector(0, obj.userData.longitude-30, 16.5);
+        point2.y += 2; 
+        
+        _global.object.position.copy(point);
+        _global.texts.position.copy(point);
+        _global.statusPanel.position.copy(point2);
 
+        var lookAtPos = new THREE.Vector3(0,0,0);
 
-        var v1 = new THREE.Vector2(point.x, point.z);
-        var v2 = new THREE.Vector2(_global.object.position.x, _global.object.position.z);
-        var angle = Math.atan2(v2.y - v1.y, v2.x - v1.x)
-        console.log( angle );
+        _global.object.lookAt(lookAtPos);
+        _global.texts.lookAt(lookAtPos);
+        _global.statusPanel.lookAt(lookAtPos);
 
-        // _global.object.position.copy( new THREE.Vector3(point.x, 0, point.z) );
-        // _global.texts.position.copy( new THREE.Vector3(point.x, 0, point.z) );
-        // _global.statusPanel.position.copy( new THREE.Vector3(point.x + 2, 2, point.z - 4.5) );
+        _global.object.rotateY(Math.PI/2);
+        _global.texts.rotateY(Math.PI/2);
+        _global.statusPanel.rotateY(Math.PI/2);
 
-        // _global.object.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
-        // _global.texts.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
-        // _global.statusPanel.position.applyAxisAngle( new THREE.Vector3(0, 1, 0), angle );
-
-        // var phi = (90 - obj.userData.latitude) * (Math.PI / 180);
-
-        // _rotateFromWorld(_global.object, {x:0, y: -phi, z:0});
-        // _rotateFromWorld(_global.texts, {x:0, y: -phi, z:0});
-        // _rotateFromWorld( _global.statusPanel, {x:0, y: -phi, z:0});
-
-        // _global.object.lookAt(_global.camera.position);
-        // _global.texts.lookAt(_global.camera.position);
-        // _global.statusPanel.lookAt(_global.camera.position);
         _this.updateDialer(obj.userData.weeklyincidents);
         _global.geoData.setDisplay(true);
         _global.geoData.update(obj.userData);
@@ -880,6 +874,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     break;
                 case "q" || "Q":
                         _global.geoData.setDisplay(false); 
+                        document.querySelector('.panel-active-firewall').style.display = 'none';
                     break;
             }
         });

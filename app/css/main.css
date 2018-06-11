@@ -4,6 +4,27 @@ body {
     overflow: hidden;
 }
 
+.status-weekly{
+    position: absolute;
+    top:5;
+    right: calc( 50% - 90px );
+    text-align: center;
+    font-size: 28px;
+    margin: 0;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.panel-active-firewall, .panel-active-sonar{
+    position: absolute;
+    display: none;
+    top:5;
+    left: 20px;
+    font-size: 56px;
+    color: #fff;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 #visualizer{
     position: absolute;
     top: 0px;

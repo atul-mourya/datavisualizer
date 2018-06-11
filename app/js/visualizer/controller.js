@@ -51,6 +51,7 @@ document.addEventListener('click', function (event) {
     if (element) {
         console.log("You selected : " + element.userData.city);
         e.visualizer.updateGeoData(element);
+        document.querySelector('.panel-active-firewall').style.display = 'block';
     } else {
         console.log("Nothing Selected");
     }
@@ -74,18 +75,22 @@ function updateCalenderPanel(month) {
     e.barChart.update( month.toLowerCase() );
     document.querySelector('#CalenderPanel').style.display = 'block';
     e.visualizer.setDisplayGeoData(false);
-
+    document.querySelector('.panel-active-firewall').style.display = 'none';
+    document.querySelector('.panel-active-sonar').style.display = 'block';
+    
 }
 
 document.querySelector('#CalenderPanel').addEventListener("change", function (event) {
 
-    updateCalenderPanel(event.target.value)
+    updateCalenderPanel(event.target.value);
     
 });
 
 document.querySelector('#calender-controller i.fas.fa-times').addEventListener('click', function(event) {
     
     document.querySelector('#CalenderPanel').style.display = 'none';
+    document.querySelector('.panel-active-sonar').style.display = 'none';
+
     
 });
 
