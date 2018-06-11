@@ -18,7 +18,7 @@
 			"color": "0xb7b7b7",
 			"emissive": "0x202020",
 			"specular": 1118481,
-			"shininess": 30,
+			"shininess": 0,
 			"map": "5C412CBB-2BB0-4F87-A22A-FC57023DFA4A",
 			"flatShading": true,
 			"depthFunc": 3,
@@ -63,15 +63,6 @@
 		"type": "Scene",
 		"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,0,0,1],
 		"children": [
-			{
-				"uuid": "5909F3BF-712F-4CAD-9DCE-62FF6177A69F",
-				"type": "HemisphereLight",
-				"name": "HemisphereLight",
-				"matrix": [1,0,0,0,0,1,0,0,0,0,1,0,0,10,0,1],
-				"color": 15658734,
-				"intensity": 1,
-				"groundColor": 6710886
-			},
 			{
 				"uuid": "F01D7CE5-A635-44DF-A810-6041625EA517",
 				"type": "Group",

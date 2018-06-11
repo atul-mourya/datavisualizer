@@ -93,7 +93,8 @@ var BarChart = function (container) {
             bars.enter().append('rect');
 
             // Update 
-            bars.attr('x', function(d) { return x(d.date); })
+            bars.transition(750)
+                .attr('x', function(d) { return x(d.date); })
                 .attr('width', x.rangeBand())
                 .attr('y', function(d) { return y(d.values); })
                 .attr("height", function(d) { return height - y(d.values); })

@@ -96,6 +96,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _initCamera();
         _initControls();
         _initRayCaster();
+        _initLights();
         _importAssets();
         _initGeoChart();
         _registerEventListeners();
@@ -111,7 +112,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
         _animateFrame();
         // _global.scene.matrixAutoUpdate  = false;
-        if (tracker.exportScene == true) window.scene = _global.scene3;
+        if (tracker.exportScene == true) window.scene = _global.scene;
     }
 
     function _initRenderer() {
@@ -183,6 +184,15 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _global.raycaster = new THREE.Raycaster();
         _global.raycaster.params.Points.threshold = 0.5;
         _global.mouse = new THREE.Vector2();
+    }
+
+    function _initLights() {
+        var hLight = new THREE.HemisphereLight(15658734, 6710886, 1);
+        var dLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
+        dLight.position.set(300, 300, 300);
+        
+        _global.scene.add(dLight);
+        _global.scene.add(hLight);
     }
 
     function _importAssets() {
@@ -673,11 +683,9 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         }
     };
 
-
-    //must try
     this.updateGeoData = function (obj) {
-        var point = _locationToVector(0, obj.userData.longitude-30, 12);
-        var point2 = _locationToVector(0, obj.userData.longitude-30, 16.5);
+        var point = _locationToVector(0, obj.userData.longitude-45, 12);
+        var point2 = _locationToVector(0, obj.userData.longitude-45, 16.5);
         point2.y += 2; 
         
         _global.object.position.copy(point);
