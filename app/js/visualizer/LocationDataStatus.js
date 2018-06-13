@@ -18,6 +18,7 @@ var LocationDataStatus = function () {
 
 	var group = new THREE.Group();
 	group.name = 'Location Status';
+	// group.rotateY(Math.PI);
 
 	var valueText1 = createText('0%');
 	var valueText2 = createText('0%');
@@ -56,6 +57,8 @@ var LocationDataStatus = function () {
 	group.add( bar3 );
 
 	var textGroup = new THREE.Group();
+	// textGroup.rotateY(Math.PI);
+
 	textGroup.add( valueText1 );
 	textGroup.add( valueText2 );
 	textGroup.add( valueText3 );
@@ -127,7 +130,7 @@ var LocationDataStatus = function () {
 		p.className = 'location-data-value';
 
 		var p1 = new THREE.CSS3DObject(p);
-			p1.rotateY(Math.PI);
+			// p1.rotateY(Math.PI);
 			p1.scale.set(0.3, 0.3, 0.3);
 			
 		return p1;
