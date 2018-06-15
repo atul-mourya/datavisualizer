@@ -48,13 +48,18 @@ e.loadDataVisualizer();
 
 document.addEventListener('mousedown', function (event) {
     var element = e.visualizer.getSelectedObject();
-    if (element) {
-        console.log("You selected : " + element.userData.city);
-        e.visualizer.updateGeoData(element);
-        document.querySelector('.panel-active-firewall').style.display = 'block';
+    if(element) {
+        if ( element.parent.name == "Location Pointers") {
+            console.log("You selected : " + element.userData.city);
+            e.visualizer.updateGeoData(element);
+            document.querySelector('.panel-active-firewall').style.display = 'block';
+        } else if(element.parent.name == "dialerbars"){
+            console.log("Week selected : " + element.name);
+        }
     } else {
         console.log("Nothing Selected");
     }
+    
 });
 var dailyStatusContainer = document.getElementById('monthStatsPanel');
 

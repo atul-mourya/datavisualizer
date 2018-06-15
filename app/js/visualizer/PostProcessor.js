@@ -25,7 +25,7 @@ var PostProcessingManager = function (data, scene, camera, renderer, width, heig
         _this.composer.addPass(renderPass);
 
         var shaderPass = new THREE.ShaderPass(THREE.CopyShader);
-        shaderPass.renderToScreen = true;
+        shaderPass.renderToScreen = false;
 
         passes.forEach(function(element){
             switch(element.type) {
@@ -37,7 +37,7 @@ var PostProcessingManager = function (data, scene, camera, renderer, width, heig
                     break;
                 case "fxaa":
                     _this.fxaaPass = new THREE.ShaderPass( THREE.FXAAShader );
-                    _this.fxaaPass.uniforms[ 'resolution' ].value.set( 1 / width, 1 / height );
+                    _this.fxaaPass.uniforms.resolution.value.set( 1 / width, 1 / height );
                     _this.fxaaPass.renderToScreen = false;
                     _this.composer.addPass(_this.fxaaPass);
                     break;
@@ -83,6 +83,17 @@ var PostProcessingManager = function (data, scene, camera, renderer, width, heig
                     _this.glitchPass.enabled = true;
                     _this.composer.addPass(_this.glitchPass);
                     break;
+                case "bokeh":
+                    _this.bokehPass = new THREE.BokehPass(scene, camera, {
+                        focus       : element.config.focus || 1.0,
+                        aperture    : element.config.aperture || 0.025,
+                        maxblur     : element.config.maxBlur || 1.0,
+                        width       : width,
+                        height      : height
+                    });
+                    _this.bokehPass.renderToScreen = true;
+                    _this.composer.addPass(_this.bokehPass);
+                    break;
             }
         });
         
@@ -107,7 +118,8 @@ var PostProcessingManager = function (data, scene, camera, renderer, width, heig
             var dependencies = 
             {
                 bloom_dependency    : ["/app/js/vendor/threejs/r93/postprocessing/LuminosityHighPassShader.js"],
-                glitch_dependency   : ["/app/js/vendor/threejs/r93/postprocessing/DigitalGlitch.js"]  
+                glitch_dependency   : ["/app/js/vendor/threejs/r93/postprocessing/DigitalGlitch.js"],  
+                bokeh_dependency    : ["/app/js/vendor/threejs/r93/postprocessing/BokehShader.js"]
             };
 
             var scripts = 
@@ -122,6 +134,7 @@ var PostProcessingManager = function (data, scene, camera, renderer, width, heig
                 vblur           : { url: "/app/js/vendor/threejs/r93/postprocessing/VerticalTiltShiftShader.js"},
                 rgbShift        : { url: "/app/js/vendor/threejs/r93/postprocessing/RGBShiftShader.js"},
                 glitch          : { url: "/app/js/vendor/threejs/r93/postprocessing/GlitchPass.js", dependency: "glitch_dependency"},
+                bokeh           : { url: "/app/js/vendor/threejs/r93/postprocessing/BokehPass.js", dependency: "bokeh_dependency"},
             };
 
             passes.forEach(function(element){

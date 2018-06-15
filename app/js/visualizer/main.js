@@ -64,7 +64,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         postprocessing: false,
 
     };
-
+    window.global = _global;
     var tracker = {
         analysis: false,
         pan: false,
@@ -224,7 +224,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 Promise.all([
 
                     _loadEnvironment(json.scene, loadingManager),
-                    // _loadBackground(json.scene, loadingManager),
+                    _loadBackground(json.scene, loadingManager),
                     _loadData(json.data, loadingManager),
                     _initDialer(7)
 
@@ -234,14 +234,24 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     _global.sceneReady = true;
                     _global.loadingManager.onLoad();
 
-                    var passes = [{
-                        type: "msaa",
-                        config: {
-                            "sampleLevel": 2
+                    var passes = [
+                        // {
+                        //     type: "msaa",
+                        //     config: {
+                        //         "sampleLevel": 2
+                        //     },
+                        // },
+                        {
+                            type: "bokeh",
+                            config: {
+                                focus       : 1,
+                                aperture    : 0.025,
+                                maxBlur     : 0.008
+                            }
                         }
-                    }];
+                    ];
                     if (_this.setting.postprocessing && passes.length > 0) {
-                        _global.msaaFilterActive = true;
+                        // _global.msaaFilterActive = true;
                         _global.postProcessor = new PostProcessingManager(data, _global.scene, _global.camera, _global.renderer, _this.container.clientWidth, _this.container.clientHeight, passes);
                     }
                     
@@ -405,6 +415,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             var barHeigth = 0.8;
             var barGeo = new THREE.PlaneBufferGeometry(barHeigth, barWidth, 1, 1);
             var bar = new THREE.Mesh( barGeo, barMat );
+            bar.name = 'week' + (i + 1);
             bar.position.y = radius - barHeigth / 2 - 0.65 ;
             bar.rotateZ(Math.PI / 2 + weekAngle);
             _rotateFromWorld(bar, new THREE.Vector3(0, 0, weekAngle));
@@ -475,7 +486,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
         _rotateFromWorld(_global.object, {x:0, y: -Math.PI/4, z:0});
         _rotateFromWorld(_global.texts, {x:0, y: -Math.PI/4, z:0});
-        _rotateFromWorld( _global.statusPanel, {x:0, y: -Math.PI/4, z:0});
+        // _rotateFromWorld( _global.statusPanel, {x:0, y: -Math.PI/4, z:0});
 
         _global.scene3.add(_global.texts);
         _global.scene3.add( _global.statusPanel);
@@ -588,8 +599,10 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     function _render() {
         _global.scene.updateMatrix();
         _global.camera.updateProjectionMatrix();
-        if (_this.setting.postprocessing && _global.postProcessor && _global.postProcessor.composer && _global.msaaFilterActive) {
+        if (_this.setting.postprocessing && _global.postProcessor && _global.postProcessor.composer ) {
             _global.postProcessor.update();
+            _global.renderer2.render(_global.scene2, _global.camera);
+            _global.renderer2.render(_global.scene3, _global.camera);
         } else {
             
             _global.renderer.render(_global.scene, _global.camera);
@@ -634,22 +647,25 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     
                     _global.flipDirection = 1;
                     _global.texts.children.forEach(function(element){
-                        element.rotateY(-Math.PI);
+                        element.rotateY(Math.PI);
                     });
 
-                } else {
-                    if( n.x < 0 && _global.flipDirection == 1 ) {
-                        _global.flipDirection = -1;
-                        _global.texts.children.forEach(function(element){
-                            element.rotateY(-Math.PI);
-                        });
-                    }
+                } else if( n.x < 0 && _global.flipDirection == 1 ) {
+                    
+                    _global.flipDirection = -1;
+                    _global.texts.children.forEach(function(element){
+                        element.rotateY(-Math.PI);
+                    });
+    
                 }
 
             } 
 
             _global.statusPanel.lookAt(_global.camera.position); 
-            // _global.statusPanel.quaternion.copy(_global.camera.quaternion);
+            
+            // _global.object.quaternion.copy(_global.camera.quaternion);
+            // _global.texts.quaternion.copy(_global.camera.quaternion);
+            
             _global.dialerPanelStatic.lookAt(_global.camera.position); 
             if (tracker.analysis) _this.rendererStats.update(_global.renderer), _this.stats.update();
             _render();
@@ -669,9 +685,20 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _global.mouse.x = (event.clientX / _global.canvas.width) * 2 - 1;
         _global.mouse.y = -(event.clientY / _global.canvas.height) * 2 + 1;
 
+        var detectableObjects = [];
+
+        _global.locationPointer.children.forEach(function (object) {
+            detectableObjects.push(object);
+        });
+        _global.dialerBars.children.forEach(function (object) {
+            detectableObjects.push(object);
+        });
+
         _global.raycaster.setFromCamera(_global.mouse, _global.camera);
-        var intersects = _global.raycaster.intersectObjects(_global.locationPointer.children);
-        _pickObject(intersects);
+        var intersects = _global.raycaster.intersectObjects(detectableObjects);
+
+        intersects && _pickObject(intersects);
+        // intersects2 && _pickObject(intersects2);
 
     }
 
