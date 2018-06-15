@@ -17,7 +17,8 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         data: data,
         loadingManager: loadingManager,
         sceneReady: false,
-        ultraHD: false
+        ultraHD: false,
+        flipDirection : -1
     };
 
     if (container) {
@@ -168,8 +169,8 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _this.controls.rotateSpeed = _this.setting.rotationSensitivity;
         _this.controls.enableDamping = _this.setting.enableDamping;
         _this.controls.dampingFactor = 0.25;
-        _this.controls.maxPolarAngle = THREE.Math.degToRad(110);
-        _this.controls.minPolarAngle = THREE.Math.degToRad(55);
+        // _this.controls.maxPolarAngle = THREE.Math.degToRad(110);
+        // _this.controls.minPolarAngle = THREE.Math.degToRad(55);
         _this.controls.autoRotateSpeed = _this.setting.autoRotateSpeed;
         _this.controls.autoRotate = _this.setting.autoRotate;
 
@@ -271,7 +272,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 if (env.fog != undefined) _global.scene.fog = env.fog;
                 
                 env.rotateY(-Math.PI);
-                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/background.png');
+                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/Bglmae.png');
                 // env.visible = false;
 
                 _global.scene.add(env);
@@ -623,10 +624,30 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         if (_global.sceneReady && (_global.doAnimate == true || _this.setting.userControlledAimation == true)) {
             _this.controls.update();
             _global.dialerPanel.lookAt(_global.camera.position);
-            // _global.backgroundParts.lookAt(_global.camera.position);
+            
+            if ( _global.geoData.isVisible ) {
+                
+                var v = new THREE.Vector3(0,0,0).copy(_global.texts.position);
+                var n =  v.project(_global.camera);
 
-            // _global.object.lookAt(_global.camera.position); 
-            // _global.texts.lookAt(_global.camera.position); 
+                if ( n.x > 0 && _global.flipDirection == -1) {
+                    
+                    _global.flipDirection = 1;
+                    _global.texts.children.forEach(function(element){
+                        element.rotateY(-Math.PI);
+                    });
+
+                } else {
+                    if( n.x < 0 && _global.flipDirection == 1 ) {
+                        _global.flipDirection = -1;
+                        _global.texts.children.forEach(function(element){
+                            element.rotateY(-Math.PI);
+                        });
+                    }
+                }
+
+            } 
+
             _global.statusPanel.lookAt(_global.camera.position); 
             // _global.statusPanel.quaternion.copy(_global.camera.quaternion);
             _global.dialerPanelStatic.lookAt(_global.camera.position); 
@@ -704,14 +725,29 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
         _this.updateDialer(obj.userData.weeklyincidents);
         _global.geoData.setDisplay(true);
+        
+        if( _global.linePointer ) {
+            
+            _disposeObjMemory( _global.linePointer );
+            _global.linePointer.parent.remove ( _global.linePointer );
+
+        } 
+
+        _global.object.updateMatrixWorld();
+
+        var lPoint = new THREE.Vector3(-5.5, -0.5, 0.5);
+        lPoint.applyMatrix4( _global.object.matrixWorld );
+
+        _global.linePointer = _createPointerLine(obj.geometry.vertices[0],  lPoint);
+        _global.scene.add(_global.linePointer);
+
         _global.geoData.update(obj.userData);
-        // setTimeout(() => {
-        //     _global.geoData.setDisplay(false);            
-        // }, 10 * 1000);
+    
     };
 
     this.setDisplayGeoData = function(boolean){
         _global.geoData.setDisplay(boolean);
+        _global.geoData.isVisible = boolean;
     };
 
     this.getSelectedObject = function () {
@@ -813,6 +849,26 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     this.experimentalHD = function (boolean) {
         (boolean) ? _global.renderer.setPixelRatio(window.devicePixelRatio * 2): _global.renderer.setPixelRatio(window.devicePixelRatio);
     };
+
+    function _createPointerLine(point1, point2) {
+        var geometry = new THREE.BufferGeometry();
+
+        var positions = new Float32Array( 6 ); // 3 vertices per point
+        geometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+
+        var line = new THREE.Line( geometry,  new THREE.LineBasicMaterial() );
+        
+        line.geometry.attributes.position.array[0] = point1.x;
+        line.geometry.attributes.position.array[1] = point1.y;
+        line.geometry.attributes.position.array[2] = point1.z;
+
+        line.geometry.attributes.position.array[3] = point2.x - 0.25;
+        line.geometry.attributes.position.array[4] = point2.y;
+        line.geometry.attributes.position.array[5] = point2.z;
+
+        return line;
+
+    }
 
     function _locationToVector (latitude, longitude, radius) {
         var phi = (90 - latitude) * (Math.PI / 180),

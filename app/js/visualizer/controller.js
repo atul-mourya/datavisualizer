@@ -46,7 +46,7 @@ e.loadDataVisualizer = function() {
 
 e.loadDataVisualizer();
 
-document.addEventListener('click', function (event) {
+document.addEventListener('mousedown', function (event) {
     var element = e.visualizer.getSelectedObject();
     if (element) {
         console.log("You selected : " + element.userData.city);

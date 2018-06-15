@@ -1,5 +1,5 @@
 var LocationDataStatus = function () {
-		
+	
 	var z = -0;
 
 	var solved = 0xffffff;
@@ -50,10 +50,30 @@ var LocationDataStatus = function () {
 	label.position.set(0, -1, 0 );
 	// statusPanel.position.set(-9.5, 5, 0)
 
+	var point1 = new THREE.Vector3(5.5, -0.5, 0);
+	var point2 = new THREE.Vector3(-5.5, -0.5, 0);
+
+	var lineGeometry = new THREE.BufferGeometry();
+
+	var positions = new Float32Array( 6 ); // 3 vertices per point
+	lineGeometry.addAttribute( 'position', new THREE.BufferAttribute( positions, 3 ) );
+
+	var line = new THREE.Line( lineGeometry,  new THREE.LineBasicMaterial() );
+	line.name = "line";
+	
+	line.geometry.attributes.position.array[0] = point1.x;
+	line.geometry.attributes.position.array[1] = point1.y;
+	line.geometry.attributes.position.array[2] = point1.z;
+
+	line.geometry.attributes.position.array[3] = point2.x;
+	line.geometry.attributes.position.array[4] = point2.y;
+	line.geometry.attributes.position.array[5] = point2.z;
+
 
 	group.add( bar1 );
 	group.add( bar2 );
 	group.add( bar3 );
+	group.add( line );
 
 	var textGroup = new THREE.Group();
 	textGroup.add( valueText1 );
@@ -61,6 +81,8 @@ var LocationDataStatus = function () {
 	textGroup.add( valueText3 );
 	textGroup.add( label );
 	// textGroup.add( statusPanel );
+
+	this.isVisible = true;
 
 	this.setDisplay = function (boolean) {
 		group.visible = boolean;
