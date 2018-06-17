@@ -995,16 +995,12 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             _global.linePointer.parent && _global.linePointer.parent.remove ( _global.linePointer );
 
         } 
-        // debugger
+
         _global.object.updateMatrixWorld();
 
-        // var lPoint = new THREE.Vector3(-5.5, -0.5, 0.5);
         var p = _global.object.children[3].geometry.attributes.position.array;
         var lPoint = new THREE.Vector3(p[3], p[4], p[5]);
-        // var lPoint = _global.object.children[3].geometry.attributes.position.array
-        // lPoint.applyMatrix4( _global.object.matrix );
         lpoint = _global.object.localToWorld(lPoint);
-        // lPoint.applyMatrix4( _global.object.matrixWorld );
 
         _global.linePointer = _createPointerLine(obj.geometry.vertices[0],  lPoint);
         _global.scene.add(_global.linePointer);
