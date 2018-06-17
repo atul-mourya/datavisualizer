@@ -64,7 +64,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         postprocessing: false,
 
     };
-    window.global = _global;
+
     var tracker = {
         analysis: false,
         pan: false,
@@ -165,7 +165,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _global.canvas.style.position = "absolute";
         _global.canvas.style.top = "0px";
         _global.canvas.style.zIndex = 0;
-        _global.canvas.style.filter = "blur(10px)";
+        _global.canvas.style.filter = "blur(4px)";
         _global.canvas.height = _this.container.clientHeight;
         _global.canvas.width = _this.container.clientWidth;
 
@@ -224,6 +224,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         dLight.position.set(300, 300, 300);
         
         // _global.scene.add(dLight);
+        // _global.scene4.add(dLight);
         _global.scene.add(hLight);
         _global.scene4.add(hLight.clone());
     }
@@ -316,6 +317,15 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 // if (env.fog != undefined) _global.scene.fog = env.fog;
                 
                 env.rotateY(-Math.PI);
+
+                var geometry1 = new THREE.BufferGeometry().fromGeometry( env.children[0].children[0].geometry );
+                var geometry2 = new THREE.BufferGeometry().fromGeometry( env.children[0].children[1].geometry );
+
+                env.children[0].children[0].geometry.dispose();
+                env.children[0].children[0].geometry = geometry1;
+
+                env.children[0].children[1].geometry.dispose();
+                env.children[0].children[1].geometry = geometry2;
                 
                 // env.visible = false;
 
@@ -458,15 +468,17 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
         _global.dialerBars = new THREE.Group();
         _global.dialerBars.name = "dialerbars";
+        
+        var barWidth = 0.1;
+        var barHeigth = 0.8;
+        var barGeo = new THREE.PlaneBufferGeometry(barHeigth, barWidth, 1, 1);
 
         for (var i = 0; i < weeks; i++) {
             
             var barMat = new THREE.MeshBasicMaterial({
                 color: "#34d66e"
             });
-            var barWidth = 0.1;
-            var barHeigth = 0.8;
-            var barGeo = new THREE.PlaneBufferGeometry(barHeigth, barWidth, 1, 1);
+            
             var bar = new THREE.Mesh( barGeo, barMat );
             bar.name = 'week' + (i + 1);
             bar.position.y = radius - barHeigth / 2 - 0.65 ;
@@ -781,13 +793,21 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         var bgObjects = new THREE.Group();
         bgObjects.name = 'BGObjects';
 
+        var plainMaterial = new THREE.MeshBasicMaterial({color:0xc4c4c4});
+        var wireframeMaterial = new THREE.MeshBasicMaterial({color:0xffffff, blending: THREE.AdditiveBlending, wireframe:true});
+
+        var obj = _global.environmentParts.children[0].clone();
+        obj.children[0].material = plainMaterial;
+        obj.children[1].material = wireframeMaterial;
+
+
         for ( var i = 0 ; i < num ; i++ ){
             
-            var obj = _global.environmentParts.children[0].clone();
-            obj.name = "bgObj" + i;
-            obj.scale.set( 0.5, 0.5, 0.5 );
-            obj.position.set( separation * i, 0, 0 );
-            bgObjects.add( obj );
+            var objcloned = obj.clone();
+            objcloned.name = "bgObj" + i;
+            objcloned.scale.set( 0.5, 0.5, 0.5 );
+            objcloned.position.set( separation * i, 0, 0 );
+            bgObjects.add( objcloned );
 
         }
 
@@ -975,11 +995,16 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             _global.linePointer.parent && _global.linePointer.parent.remove ( _global.linePointer );
 
         } 
-
+        // debugger
         _global.object.updateMatrixWorld();
 
-        var lPoint = new THREE.Vector3(-5.5, -0.5, 0.5);
-        lPoint.applyMatrix4( _global.object.matrixWorld );
+        // var lPoint = new THREE.Vector3(-5.5, -0.5, 0.5);
+        var p = _global.object.children[3].geometry.attributes.position.array;
+        var lPoint = new THREE.Vector3(p[3], p[4], p[5]);
+        // var lPoint = _global.object.children[3].geometry.attributes.position.array
+        // lPoint.applyMatrix4( _global.object.matrix );
+        lpoint = _global.object.localToWorld(lPoint);
+        // lPoint.applyMatrix4( _global.object.matrixWorld );
 
         _global.linePointer = _createPointerLine(obj.geometry.vertices[0],  lPoint);
         _global.scene.add(_global.linePointer);
