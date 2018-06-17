@@ -94,8 +94,91 @@ document.querySelector('#CalenderPanel').addEventListener("change", function (ev
 document.querySelector('#calender-controller i.fas.fa-times').addEventListener('click', function(event) {
     
     document.querySelector('#CalenderPanel').style.display = 'none';
-    document.querySelector('.panel-active-sonar').style.display = 'none';
-
+    // document.querySelector('.panel-active-sonar').style.display = 'none';
     
 });
 
+document.querySelector("#btnLeft").addEventListener('click', function (event) {
+    var onStart = null;
+    var onLoad = function () {
+        onTargetChange();
+    };
+    resetUI();
+    e.visualizer.next( onStart, onLoad );
+});
+
+document.querySelector("#btnRight").addEventListener('click', function (event) {
+    var onStart = null;
+    var onLoad = function () {
+        onTargetChange();
+    };
+    resetUI();
+    e.visualizer.previous( onStart, onLoad );
+});
+
+function resetUI() {
+    document.querySelector('#CalenderPanel').style.display = 'none';
+    document.querySelector('.panel-active-sonar').style.display = 'none';
+    document.querySelector('.panel-active-firewall').style.display = 'none';
+    document.querySelector('.panel-active-insight').style.display = 'none';
+    document.querySelector('.panel-active-autoprotect').style.display = 'none';
+    document.querySelector('#visualizer').style.filter = 'blur(0px)';
+}
+
+function onTargetChange() {
+    
+    var activeGlobe = e.visualizer.getActiveGlobe();
+
+    switch ( activeGlobe ) {
+        case 1:
+            // Sample Status 1 UI
+            document.querySelector('#btnLeft').style.display = 'none';
+            document.querySelector('.btnRight-text').innerText = 'Sample1';
+            break;
+        case 2:
+            // Sample Status 2 UI
+            document.querySelector('#btnLeft').style.display = 'block';
+            document.querySelector('.btnLeft-text').innerText = 'Sample1';
+            document.querySelector('.btnRight-text').innerText = 'Sample2';
+            break;
+        case 3:
+            // AutoProtect Status UI
+            console.log('this target: autoprotect');
+            document.querySelector('.panel-active-autoprotect').style.display = 'block';
+            document.querySelector('.btnLeft-text').innerText = 'Sample2';
+            document.querySelector('.btnRight-text').innerText = 'Firewall';
+            break;
+        case 4:
+            //Firewall status UI
+            console.log('this target: firewall');
+            document.querySelector('.panel-active-firewall').style.display = 'block';
+            document.querySelector('.btnLeft-text').innerText = 'Autoprotect';
+            document.querySelector('.btnRight-text').innerText = 'Sonar';
+            break;
+        case 5:
+            // Sonar Status UI
+            console.log('this target: sonar');
+            updateCalenderPanel('January');
+            document.querySelector('#visualizer').style.filter = 'blur(5px)';
+            document.querySelector('.panel-active-sonar').style.display = 'block';
+            document.querySelector('.btnLeft-text').innerText = 'Firewall';
+            document.querySelector('.btnRight-text').innerText = 'Insight';
+            break;
+        case 6:
+            // insight Status UI
+            console.log('this target: insight');
+            document.querySelector('#btnRight').style.display = 'block';
+            document.querySelector('.panel-active-insight').style.display = 'block';
+            document.querySelector('.btnLeft-text').innerText = 'Sonar';
+            document.querySelector('.btnRight-text').innerText = 'Sample3';
+            break;
+        case 7:
+            // Sample Status 3 UI
+            document.querySelector('#btnRight').style.display = 'none';
+            document.querySelector('.btnLeft-text').innerText = 'Sample3';
+            break;
+        default:
+            break;
+    }
+
+};

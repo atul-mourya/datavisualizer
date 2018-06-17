@@ -92,6 +92,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     function _init() {
         THREE.Cache.enabled = true;
         _initScene();
+        _initRenderer3();
         _initRenderer();
         _initCssRenderer();
         _initCamera();
@@ -106,10 +107,13 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     function _initScene() {
         _global.scene = new THREE.Scene();
         _global.scene.name = "Scene";
-        _global.scene.background = new THREE.Color(0xffffff);
-        _global.scene.fog = new THREE.Fog(0, 0.1, 0);
+        // _global.scene.background = new THREE.Color(0xffffff);
+        // _global.scene.fog = new THREE.Fog(0, 0.1, 0);
         _global.scene2 = new THREE.Scene();
         _global.scene3 = new THREE.Scene();
+        _global.scene4 = new THREE.Scene();
+
+        _global.scene4.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/Bglmae.png');
 
         _animateFrame();
         // _global.scene.matrixAutoUpdate  = false;
@@ -120,11 +124,11 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
         _global.renderer = new THREE.WebGLRenderer({
             antialias: _this.setting.antialias,
-            alpha: false,
+            alpha: true,
         });
 
         _global.renderer.setPixelRatio(window.devicePixelRatio);
-        _global.renderer.setClearColor(new THREE.Color(0x000000, 1.0));
+        _global.renderer.setClearColor(0x000000, 0);
 
         _global.renderer.gammaInput = _this.setting.rendererGammaInput;
         _global.renderer.gammaOutput = _this.setting.rendererGammaOutput;
@@ -145,9 +149,36 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         if (tracker.analysis) _stats();
     }
 
+    function _initRenderer3() {
+
+        _global.renderer3 = new THREE.WebGLRenderer({
+            antialias: false,
+            alpha: false,
+        });
+
+        _global.renderer3.setPixelRatio(window.devicePixelRatio);
+
+        _global.renderer3.gammaInput = false;
+        _global.renderer3.gammaOutput = false;
+
+        _global.canvas = _global.renderer3.domElement;
+        _global.canvas.style.position = "absolute";
+        _global.canvas.style.top = "0px";
+        _global.canvas.style.zIndex = 0;
+        _global.canvas.style.filter = "blur(10px)";
+        _global.canvas.height = _this.container.clientHeight;
+        _global.canvas.width = _this.container.clientWidth;
+
+        _global.renderer3.setSize(_global.canvas.width, _global.canvas.height);
+
+        _this.container.appendChild(_global.canvas);
+
+    }
+
     function _initCssRenderer() {
         _global.renderer2 = new THREE.CSS3DRenderer();
         _global.renderer2.setSize(_global.canvas.width, _global.canvas.height);
+
         _global.renderer2.domElement.style.position = 'absolute';
         _global.renderer2.domElement.style.top = 0;
         _this.container.appendChild(_global.renderer2.domElement);
@@ -169,8 +200,8 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _this.controls.rotateSpeed = _this.setting.rotationSensitivity;
         _this.controls.enableDamping = _this.setting.enableDamping;
         _this.controls.dampingFactor = 0.25;
-        // _this.controls.maxPolarAngle = THREE.Math.degToRad(110);
-        // _this.controls.minPolarAngle = THREE.Math.degToRad(55);
+        _this.controls.maxPolarAngle = THREE.Math.degToRad(110);
+        _this.controls.minPolarAngle = THREE.Math.degToRad(55);
         _this.controls.autoRotateSpeed = _this.setting.autoRotateSpeed;
         _this.controls.autoRotate = _this.setting.autoRotate;
 
@@ -192,8 +223,9 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         var dLight = new THREE.DirectionalLight( 0xffffff, 0.5 );
         dLight.position.set(300, 300, 300);
         
-        _global.scene.add(dLight);
+        // _global.scene.add(dLight);
         _global.scene.add(hLight);
+        _global.scene4.add(hLight.clone());
     }
 
     function _importAssets() {
@@ -224,13 +256,15 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                 Promise.all([
 
                     _loadEnvironment(json.scene, loadingManager),
-                    _loadBackground(json.scene, loadingManager),
+                    // _loadBackground(json.scene, loadingManager),
                     _loadData(json.data, loadingManager),
                     _initDialer(7)
 
                 ]).then(function () {
 
                     console.log('Environment loaded');
+                    _loadBackground(json.scene, loadingManager),
+
                     _global.sceneReady = true;
                     _global.loadingManager.onLoad();
 
@@ -252,7 +286,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     ];
                     if (_this.setting.postprocessing && passes.length > 0) {
                         // _global.msaaFilterActive = true;
-                        _global.postProcessor = new PostProcessingManager(data, _global.scene, _global.camera, _global.renderer, _this.container.clientWidth, _this.container.clientHeight, passes);
+                        _global.postProcessor = new PostProcessingManager(data, _global.scene4, _global.camera, _global.renderer3, _this.container.clientWidth, _this.container.clientHeight, passes);
                     }
                     
                     _global.mainObject = _global.scene.getObjectByName( 'MainGlobe' );
@@ -278,11 +312,11 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             objectloader.setTexturePath(_global.data.cdn + json.texturePath );
             objectloader.load(_global.data.cdn + json.url, function (env) {
 
-                if (env.background != undefined) _global.scene.background = env.background;
-                if (env.fog != undefined) _global.scene.fog = env.fog;
+                // if (env.background != undefined) _global.scene.background = env.background;
+                // if (env.fog != undefined) _global.scene.fog = env.fog;
                 
                 env.rotateY(-Math.PI);
-                _global.scene.background = new THREE.TextureLoader().load(_global.data.cdn + '/resources/3dAssets/textures/Bglmae.png');
+                
                 // env.visible = false;
 
                 _global.scene.add(env);
@@ -298,6 +332,25 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     }
 
     function _loadBackground(json, loadManager) {
+        
+        return new Promise(function (resolve, reject) {
+            
+            _global.bgObj = _createEarthArray(7, 10);
+            
+            var box = new THREE.Box3().setFromObject(_global.bgObj);
+            var cVec3 = new THREE.Vector3(0,0,0).copy(box.getCenter());
+
+            _global.bgObj.position.x = -cVec3.x;
+
+            _global.scene4.add(_global.bgObj);
+
+            resolve();
+
+        });
+
+    }
+
+    function _loadBackground1(json, loadManager) {
         return new Promise(function (resolve, reject) {
 
             var objectloader = new THREE.ObjectLoader(loadManager);
@@ -573,7 +626,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
     function _disposeObjMemory(obj) {
         if (obj) {
-            if (obj.type === "Mesh") {
+            if (obj.type === "Mesh" || "Line") {
 
                 if (obj.material) {
                     obj.material.map && obj.material.map.dispose();
@@ -603,11 +656,14 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             _global.postProcessor.update();
             _global.renderer2.render(_global.scene2, _global.camera);
             _global.renderer2.render(_global.scene3, _global.camera);
+            _global.renderer3.render(_global.scene4, _global.camera);
         } else {
             
             _global.renderer.render(_global.scene, _global.camera);
             _global.renderer2.render(_global.scene2, _global.camera);
             _global.renderer2.render(_global.scene3, _global.camera);
+            _global.renderer3.render(_global.scene4, _global.camera);
+
         }
     }
 
@@ -662,8 +718,9 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
             } 
 
             _global.statusPanel.lookAt(_global.camera.position); 
-            
-            // _global.object.quaternion.copy(_global.camera.quaternion);
+            _global.scene4.lookAt(_global.camera.position);
+
+            // _global.scene4.quaternion.copy(_global.camera.quaternion);
             // _global.texts.quaternion.copy(_global.camera.quaternion);
             
             _global.dialerPanelStatic.lookAt(_global.camera.position); 
@@ -719,6 +776,165 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         }
     }
 
+    function _createEarthArray(num, separation) {
+         
+        var bgObjects = new THREE.Group();
+        bgObjects.name = 'BGObjects';
+
+        for ( var i = 0 ; i < num ; i++ ){
+            
+            var obj = _global.environmentParts.children[0].clone();
+            obj.name = "bgObj" + i;
+            obj.scale.set( 0.5, 0.5, 0.5 );
+            obj.position.set( separation * i, 0, 0 );
+            bgObjects.add( obj );
+
+        }
+
+        return bgObjects;
+    }
+
+    function _clearAll() {
+        _global.locationPointer.visible = false;
+        _global.object.visible = false;
+        if( _global.linePointer ) {
+            _disposeObjMemory( _global.linePointer );
+            _global.linePointer.parent && _global.linePointer.parent.remove ( _global.linePointer );
+        }
+        
+        _global.texts.children.forEach(function(object){
+            object.element.style.display = 'none';
+        });
+
+        _global.statusPanel.element.style.display = 'none';
+    }
+
+    function _slideTarget( direction, onStart, onLoad ){
+        
+        onStart && onStart();
+
+        _clearAll();
+
+        var pos =  _global.bgObj.position.x;
+        switch ( pos + ( 10 * direction ) ) {
+            case 0:
+                console.log('zeroth');
+                break;
+            case -10:
+                console.log('first');
+                break;
+            case -20:
+                console.log('second');
+                
+                break;
+            case -30:
+                console.log('thrid');
+                setTimeout(() => {
+                    _global.locationPointer.visible = true;
+                }, 1500); 
+                break;
+            case -40:
+                console.log('forth');
+                
+                break;
+            case -50:
+                console.log('fifth');
+                break;
+            case -60:
+                console.log('sixth');
+                
+                break;
+        
+            default:
+
+                break;
+        }
+
+
+        var callback = function (direction) {
+            tween1 (direction)
+        }
+
+        var callback2 = function (direction) {
+
+            _global.environmentParts.visible = true;
+            TweenMax.to(_global.environmentParts.scale, 0.5, {
+                x : 1,
+                y : 1,
+                z : 1,
+                delay: 0.01,
+                onComplete: callback3,
+                onCompleteParams: [direction]
+            });
+        }
+        
+        var callback3 = function (direction) {
+            onLoad && onLoad(direction);
+        } 
+
+        
+        new TweenMax.to(_global.environmentParts.scale, 0.5, {
+            x : 0.5,
+            y : 0.5,
+            z : 0.5,
+            onComplete: callback,
+            onCompleteParams: [direction],
+        });
+
+        function tween1 (direction){
+            new TweenMax.to(_global.bgObj.position, 0.5, {
+                x: _global.bgObj.position.x + ( 10 * direction ),
+                onStart: function () {   
+                    _global.environmentParts.visible = false;
+                },
+                onComplete : callback2,
+                onCompleteParams: [direction]
+                
+            });
+        } 
+    }
+
+    this.next = function ( onStart, onLoad ) {
+        _slideTarget( 1, onStart, onLoad );
+    };
+
+    this.previous = function ( onStart, onLoad ) {
+        _slideTarget( -1, onStart, onLoad  )
+    };
+
+    this.getActiveGlobe= function(){
+        
+        var result;
+        
+        switch ( _global.bgObj.position.x ) {
+            case 0:
+                result = 1;
+                break;
+            case -10:
+                result = 2;
+                break;
+            case -20:
+                result = 3;
+                break;
+            case -30:
+                result = 4;
+                break;
+            case -40:
+                result = 5;
+                break;
+            case -50:
+                result = 6;
+                break;
+            case -60:
+                result = 7;
+                break;
+            default:
+                result = 0;
+                break;
+        }
+        return result;
+    };
+
     this.updateDialer = function(data){
         for( var i = 0; i < 52; i++ ) {
             if ( data[i] <= 10 ) { 
@@ -756,7 +972,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         if( _global.linePointer ) {
             
             _disposeObjMemory( _global.linePointer );
-            _global.linePointer.parent.remove ( _global.linePointer );
+            _global.linePointer.parent && _global.linePointer.parent.remove ( _global.linePointer );
 
         } 
 
@@ -769,6 +985,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _global.scene.add(_global.linePointer);
 
         _global.geoData.update(obj.userData);
+        _global.geoData.isVisible = true;
     
     };
 
@@ -965,7 +1182,10 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
                     break;
                 case "q" || "Q":
                         _global.geoData.setDisplay(false); 
-                        document.querySelector('.panel-active-firewall').style.display = 'none';
+                        if( _global.linePointer ) {
+                            _disposeObjMemory( _global.linePointer );
+                            _global.linePointer.parent && _global.linePointer.parent.remove ( _global.linePointer );
+                        }
                     break;
             }
         });
@@ -1002,6 +1222,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         _global.postProcessor && _global.postProcessor.composer.setSize(_global.canvas.width, _global.canvas.height);
         _global.renderer.setSize(_global.canvas.width, _global.canvas.height);
         _global.renderer2.setSize(_global.canvas.width, _global.canvas.height);
+        _global.renderer3.setSize(_this.container.clientWidth, _this.container.clientHeight);
         _global.camera.aspect = _global.canvas.width / _global.canvas.height;
 
         _refreshRenderFrame();
