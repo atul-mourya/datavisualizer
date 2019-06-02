@@ -176,8 +176,10 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
     }
 
     function _initCssRenderer() {
+        var rect = _global.canvas.getBoundingClientRect();
+
         _global.renderer2 = new THREE.CSS3DRenderer();
-        _global.renderer2.setSize(_global.canvas.width, _global.canvas.height);
+        _global.renderer2.setSize(rect.width, rect.height);
 
         _global.renderer2.domElement.style.position = 'absolute';
         _global.renderer2.domElement.style.top = 0;
@@ -751,8 +753,10 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
 
     function _onMouseMove(event) {
 
-        _global.mouse.x = (event.clientX / _global.canvas.width) * 2 - 1;
-        _global.mouse.y = -(event.clientY / _global.canvas.height) * 2 + 1;
+        var rect = _global.canvas.getBoundingClientRect();
+
+        _global.mouse.x = (event.clientX / rect.width) * 2 - 1;
+        _global.mouse.y = -(event.clientY / rect.height) * 2 + 1;
 
         var detectableObjects = [];
 
