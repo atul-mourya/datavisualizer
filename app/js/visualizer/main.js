@@ -179,7 +179,7 @@ var AbstractDataVisualizer = function (data, loadingManager, scripts) {
         var rect = _global.canvas.getBoundingClientRect();
 
         _global.renderer2 = new THREE.CSS3DRenderer();
-        _global.renderer2.setSize(_global.canvas.width, _global.canvas.height);
+        _global.renderer2.setSize(rect.width, rect.height);
 
         _global.renderer2.domElement.style.position = 'absolute';
         _global.renderer2.domElement.style.top = 0;
